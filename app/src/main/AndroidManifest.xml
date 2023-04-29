@@ -11,7 +11,7 @@ package="NoteIt">
     android:label="@string/app_name"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
-    android:theme="@style/Theme.Tempano">
+    android:theme="@style/Theme.NoteIt">
     <activity android:name="com.ts.NoteIt.MainActivity" />
     <activity
         android:name="com.ts.NoteIt.SignInActivity"
