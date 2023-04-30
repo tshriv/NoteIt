@@ -15,18 +15,20 @@ class viewModel : ViewModel() {
     val dataSetChanged: MutableLiveData<Boolean> = MutableLiveData(false)
     var selectednote: Note? = null
     val db = Firebase.firestore
-    var userID: String = "jjlkm"
-    var userEmailorPhone = "fds"
+    var userID: String = ""
+    var userEmailorPhone = ""
 
     // val userDocRef = db.collection("users").document(userID).collection("notes")
     var existingUser = false
 
 
-     fun createUserIfneeded() {
+    fun createUserIfneeded() {
         if (!existingUser) {
-            val data = hashMapOf("email" to userEmailorPhone )
+            val data = hashMapOf("email" to userEmailorPhone)
             db.collection("users").document(userID).set(data)
-            existingUser=true
+                .addOnSuccessListener { Log.d("##addUserIfNeeded", "sucess") }
+                .addOnFailureListener { e -> Log.w("##addUserIfNeeded", "failed=", e) }
+            existingUser = true
         }
     }
 

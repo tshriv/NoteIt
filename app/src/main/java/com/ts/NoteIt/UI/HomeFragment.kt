@@ -2,10 +2,12 @@ package com.ts.NoteIt.UI
 
 import NoteIt.R
 import NoteIt.databinding.FragmentHomeBinding
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -89,8 +91,6 @@ class HomeFragment : Fragment() {
     fun getFilteredNotes(priority: Int) {
         val note = viewModel.getFilteredNotes(priority)
         adapter.updateList(note)
-
-
     }
 
     fun getAllNotes() {
@@ -128,18 +128,32 @@ class HomeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logout -> {
+                logout()
+                true
+            }
+            else ->
+                super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun logout() {
+        val builder = AlertDialog.Builder(context!!).setMessage("Do You Want to Logout?")
+            .setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, i ->
                 AuthUI.getInstance().signOut(requireContext())
                     .addOnCompleteListener {
                         val intent = Intent(requireContext(), SignInActivity::class.java)
                         requireActivity().finishAffinity()
                         startActivity(intent)
                     }
-                true
-            }
+                dialog.dismiss()
+            }).setNegativeButton(
+                "No",
+                DialogInterface.OnClickListener { dialog, i -> dialog.dismiss() })
 
-            else ->
-                super.onOptionsItemSelected(item)
-        }
+        builder.create()
+        builder.show()
+
+
     }
 
     fun setupRecyclerView(list: MutableList<Note>) {
